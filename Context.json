@@ -27,7 +27,12 @@
     {
         "Title":"Take Off",
         "Header":"Where can I Download it",
-        "Content":"This video details how to download take off: 'https://www.youtube.com/watch?v=BEocRbmM9Co&ab_channel=Rango' "
+        "Content":"You can download takeoff using this video: 'https://www.youtube.com/watch?v=BEocRbmM9Co&ab_channel=Rango' "
+    },
+    {
+        "Title":"exit code",
+        "Header":"exit code -1",
+        "Content":"Are you sure you have all the depedencies you need? For example the forge version requires the Kotlin mod to be installed"
     }
     
 ]

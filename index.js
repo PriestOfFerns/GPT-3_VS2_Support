@@ -22,17 +22,24 @@ client.on('ready', () => {
 });
 
 
-const prefix = `You are a Q&A bot named "Sup Port" and answer questions regarding the Minecraft Mod "Valkyrien Skies 2" which is about building Airships. The official Valkyrien Skies Website is "https://www.valkyrienskies.org/". The download website is "https://www.curseforge.com/minecraft/mc-mods/valkyrien-skies", the wiki Website is "https://wiki.valkyrienskies.org/wiki/Main_Page" and the faq website is "https://wiki.valkyrienskies.org/wiki/FAQ". You were made by "<@394037472625164299>" and "<@974011724942434314>".
-Your task is to answer the question below as truthfully as possible using the provided context that contains answers from previous support tickets. If the answer is not contained within the text below answer that you don't know, do not try to come up with an answer. Do not give unnecessary details about information not asked for. If someone does not get support by you or he asks for support from the staff, tell him to ask "<@271429271577296896>""
-Context: `
+const prefix = `You are a Q&A bot named "Sup Port" and answer questions regarding the Minecraft Mod "Valkyrien Skies 2" which is about building Airships. The official Valkyrien Skies Website is "https://www.valkyrienskies.org/". The download website for "Valkyrien Skies 2" is "https://www.curseforge.com/minecraft/mc-mods/valkyrien-skies". This is only the download for Valkyrien Skies 2, not for Clockwork or Takeoff or similar. The wiki Website is "https://wiki.valkyrienskies.org/wiki/Main_Page" and the faq website is "https://wiki.valkyrienskies.org/wiki/FAQ". You were made by "<@394037472625164299>" and "<@974011724942434314>". Do not mention their names unless you got explicitly asked you for them.
+
+Your task is to answer the "Valkyrien Skies 2" related question below as truthfully as possible using the provided context that contains answers from previous support tickets. Only reply if the answer is contained in the Context section below. Do not give unnecessary details. If the answer to the question isn't in curly brackets {like this}, then reply that you are unsure. If the curly brackets after context are empty, then reply that you are unsure
+
+Context: { `
 
 
-
+let State = false
 client.on('messageCreate', async msg => {
-
+  if (msg.content == "SUP_ON") {
+    State = true
+  }
+  else if (msg.content == "SUP_OFF") {
+    State = false
+  }
  
 
-  if (msg.channel.id ==  "1069715100434432100" && msg.author.bot == false) {
+  if (State == true && msg.channel.id ==  "1069715100434432100" && msg.author.bot == false) {
 
     const ConJSON =  JSON.parse(readFileSync("Context.json"))
     const Ordered = await order_document_sections_by_query_similarity(msg.content, Embeds) 
@@ -44,7 +51,7 @@ client.on('messageCreate', async msg => {
       const EmbOrdered = Ordered[x][1].split(",")
       const Points = Ordered[x][0]
     
-      if (Points < 0.21) {
+      if (Points < 0.26) {
         break
       }
       
@@ -60,7 +67,7 @@ client.on('messageCreate', async msg => {
     
     
     console.log(msg.content)
-    const pref = prefix + Context + "\r\nQuestion: " +msg.content +"\r\nAnswer:"
+    const pref = prefix + Context  + "}\r\nQuestion: " +msg.content +"\r\nAnswer:"
     console.log(pref)
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
