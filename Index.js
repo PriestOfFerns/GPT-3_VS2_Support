@@ -1,8 +1,12 @@
 require('dotenv').config();
 
+require('fs')
+
+
 const { Configuration, OpenAIApi } = require("openai");
 
-
+const { Client, GatewayIntentBits } = require('discord.js');
+const { readFileSync } = require('fs');
 
 
 const configuration = new Configuration({
@@ -10,7 +14,7 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const { Client, GatewayIntentBits } = require('discord.js');
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent] });
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -40,5 +44,41 @@ client.on('messageCreate', async msg => {
     
 });
 
+MODEL_NAME = "curie"
 
-client.login(process.env.DISCORD_TOKEN);
+DOC_EMBEDDINGS_MODEL = "text-search-"+MODEL_NAME+"-doc-001"
+QUERY_EMBEDDINGS_MODEL = "text-search-"+MODEL_NAME+"-query-001"
+
+async function get_embedding(text, model){
+  const result = await openai.createEmbedding({
+    "model": model,
+    "input": text
+  })
+   
+   return result["data"]["data"][0]["embedding"]
+}
+
+function get_doc_embedding(text){
+    return get_embedding(text, DOC_EMBEDDINGS_MODEL)
+}
+function get_query_embedding(text){
+    return get_embedding(text, QUERY_EMBEDDINGS_MODEL)
+}
+
+async function compute_doc_embeddings(df) { 
+  const Dic = {}
+
+
+  for(x in df) {
+
+    Dic[x] = await get_doc_embedding(df[x]["Content"])
+    
+  }
+  return Dic
+}
+
+const data = JSON.parse(readFileSync("Context.json"))
+
+compute_doc_embeddings(data).then(Dic=>{console.log(Dic)})
+
+//client.login(process.env.DISCORD_TOKEN);
