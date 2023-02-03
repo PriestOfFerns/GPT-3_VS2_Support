@@ -1,22 +1,33 @@
 [
     {
         "Title":"Optifine",
-        "Header":"Replacement",
+        "Header":"What do I Replacement it with",
         "Content":"Optifine should be replaced with rubidium, since unlike Optifine, rubidium is open source."
     },
     {
         "Title":"Optifine",
-        "Header":"Use",
+        "Header":"Should I Use it",
         "Content":"You shouldn't use Optifine, it's closed soured nature prevents us from making compat for it."
     },
     {
         "Title":"Clockwork",
-        "Header":"Where Download",
+        "Header":"Where can I Download it",
         "Content":"You can't download Clockwork as it's currently in a closed alpha, testers are selected by the devs. And no, constantly asking doesn't help you become a tester."
     },
     {
         "Title":"Clockwork",
-        "Header":"When Release",
+        "Header":"When does it Release",
         "Content":"Clockwork is currently in a closed alpha, it'll be released to the public anywhere from 2-4 weeks."
+    },
+    {
+        "Title":"Ship",
+        "Header":"It is Invisible",
+        "Content":"Are you using Optifine? If you are, then you should remove it, as it isn't compatible and can lead to your ship becoming invisible."
+    },
+    {
+        "Title":"Take Off",
+        "Header":"Where can I Download it",
+        "Content":"This video details how to download take off: 'https://www.youtube.com/watch?v=BEocRbmM9Co&ab_channel=Rango' "
     }
+    
 ]

@@ -22,8 +22,8 @@ client.on('ready', () => {
 });
 
 
-const prefix = `You are a Q&A bot named "Sup Port" and answer questions regarding the Minecraft Mod "Valkyrien Skies 2". 
-Your task is to answer the question below as truthfully as possible using the provided context, and if the answer is not contained within the text below answer that you don't know. Do not give unnecessary details about information not asked for.
+const prefix = `You are a Q&A bot named "Sup Port" and answer questions regarding the Minecraft Mod "Valkyrien Skies 2" which is about building Airships. The official Valkyrien Skies Website is "https://www.valkyrienskies.org/". The download website is "https://www.curseforge.com/minecraft/mc-mods/valkyrien-skies", the wiki Website is "https://wiki.valkyrienskies.org/wiki/Main_Page" and the faq website is "https://wiki.valkyrienskies.org/wiki/FAQ". You were made by "<@394037472625164299>" and "<@974011724942434314>".
+Your task is to answer the question below as truthfully as possible using the provided context that contains answers from previous support tickets. If the answer is not contained within the text below answer that you don't know, do not try to come up with an answer. Do not give unnecessary details about information not asked for. If someone does not get support by you or he asks for support from the staff, tell him to ask "<@271429271577296896>""
 Context: `
 
 
@@ -36,16 +36,15 @@ client.on('messageCreate', async msg => {
 
     const ConJSON =  JSON.parse(readFileSync("Context.json"))
     const Ordered = await order_document_sections_by_query_similarity(msg.content, Embeds) 
-
+    console.log(Ordered)
 
     let Context = "\n"
     const MaxP = Ordered[0][0]
     for (x in Ordered) {
       const EmbOrdered = Ordered[x][1].split(",")
       const Points = Ordered[x][0]
-      console.log(Points)
-   
-      if (Points < 0.3) {
+    
+      if (Points < 0.21) {
         break
       }
       
@@ -64,10 +63,10 @@ client.on('messageCreate', async msg => {
     const pref = prefix + Context + "\r\nQuestion: " +msg.content +"\r\nAnswer:"
     console.log(pref)
     const completion = await openai.createCompletion({
-      model: "text-curie-001",
+      model: "text-davinci-003",
       prompt: pref,
-      temperature: 0,
-      max_tokens: 120
+      temperature: 0.05,
+      max_tokens: 300
     });
     
     msg.reply(completion.data.choices[0].text)
@@ -75,7 +74,7 @@ client.on('messageCreate', async msg => {
     
 });
 
-MODEL_NAME = "curie"
+MODEL_NAME = "davinci"
 
 DOC_EMBEDDINGS_MODEL = "text-search-"+MODEL_NAME+"-doc-001"
 QUERY_EMBEDDINGS_MODEL = "text-search-"+MODEL_NAME+"-query-001"
@@ -173,6 +172,7 @@ const Embeds = load_embeddings("ContextEmbedding.json")
 create_embeddings(data).then(Embs=>{
   Jfile = JSON.stringify(Embs)
   writeFileSync("ContextEmbedding.json",Jfile)
+  console.log("done")
 })
 
 
