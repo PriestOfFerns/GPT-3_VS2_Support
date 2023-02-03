@@ -6,7 +6,7 @@ require('fs')
 const { Configuration, OpenAIApi } = require("openai");
 
 const { Client, GatewayIntentBits } = require('discord.js');
-const { readFileSync } = require('fs');
+const { readFileSync, fstat, writeFileSync } = require('fs');
 
 
 const configuration = new Configuration({
@@ -66,7 +66,7 @@ function get_query_embedding(text){
 }
 
 async function compute_doc_embeddings(df) { 
-  const Dic = {}
+  let Dic = {}
 
 
   for(x in df) {
@@ -77,8 +77,41 @@ async function compute_doc_embeddings(df) {
   return Dic
 }
 
+
+function load_embeddings(EmbeddingPath) {
+    df = JSON.parse(readFileSync(EmbeddingPath))
+    let Dic = {}
+    for (x in df) {
+      const object = df[x]
+      Dic[object["Title"]+","+object["Header"]] = object["Vectors"]
+    }
+
+    return Dic
+}
+
+async function create_embeddings(df) {
+  const docEmb = await compute_doc_embeddings(data)
+  Final = []
+  for (x in docEmb) {
+    Final[x] = {
+      "Header":df[x]["Header"],
+      "Title":df[x]["Title"],
+      "Vectors":docEmb[x]
+    }
+  }
+  return Final
+}
+
 const data = JSON.parse(readFileSync("Context.json"))
 
-compute_doc_embeddings(data).then(Dic=>{console.log(Dic)})
+/* Creates a "ContextEmbedding.json" file"
+
+
+create_embeddings(data).then(Embs=>{
+  Jfile = JSON.stringify(Embs)
+  writeFileSync("ContextEmbedding.json",Jfile)
+})
+*/
+
 
 //client.login(process.env.DISCORD_TOKEN);
