@@ -22,8 +22,8 @@ client.on('ready', () => {
 });
 
 
-const prefix = `Answer the question as truthfully as possible using the provided text, and if the answer is not contained within the text below answer that you don't know.
-
+const prefix = `You are a Q&A bot named "Sup Port" and answer questions regarding the Minecraft Mod "Valkyrien Skies 2". 
+Your task is to answer the question below as truthfully as possible using the provided context, and if the answer is not contained within the text below answer that you don't know. Do not give unnecessary details about information not asked for.
 Context: `
 
 
@@ -39,30 +39,34 @@ client.on('messageCreate', async msg => {
 
 
     let Context = "\n"
-    for (x in [0,1,2]) {
+    const MaxP = Ordered[0][0]
+    for (x in Ordered) {
       const EmbOrdered = Ordered[x][1].split(",")
- 
+      const Points = Ordered[x][0]
+      console.log(Points)
    
-  
+      if (Points < 0.3) {
+        break
+      }
       
       for (x of ConJSON) {
       
-        if (x.Title == EmbOrdered[0] && x.Header == EmbOrdered[1]) {
-          Context+="*"+x.Content+"\n\r"
+        if  ( x.Title == EmbOrdered[0] && x.Header == EmbOrdered[1]) {
+          Context+=x.Content+"\n\r"
           break
           
-        }
+        } 
       }
     }
     
     
     console.log(msg.content)
-    const pref = prefix + Context + "\r\nQ: " +msg.content +"\r\nA:"
+    const pref = prefix + Context + "\r\nQuestion: " +msg.content +"\r\nAnswer:"
     console.log(pref)
     const completion = await openai.createCompletion({
       model: "text-curie-001",
       prompt: pref,
-      temperature: 0.05,
+      temperature: 0,
       max_tokens: 120
     });
     
