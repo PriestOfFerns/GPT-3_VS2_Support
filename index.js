@@ -7,6 +7,7 @@ const { Configuration, OpenAIApi } = require("openai");
 
 const { Client, GatewayIntentBits } = require('discord.js');
 const { readFileSync, fstat, writeFileSync } = require('fs');
+const { off } = require('process');
 
 
 const configuration = new Configuration({
@@ -83,14 +84,14 @@ function load_embeddings(EmbeddingPath) {
     let Dic = {}
     for (x in df) {
       const object = df[x]
-      Dic[object["Title"]+","+object["Header"]] = object["Vectors"]
+      Dic[ [object["Title"],object["Header"]] ] = object["Vectors"]
     }
 
     return Dic
 }
 
 async function create_embeddings(df) {
-  const docEmb = await compute_doc_embeddings(data)
+  const docEmb = await compute_doc_embeddings(df)
   Final = []
   for (x in docEmb) {
     Final[x] = {
@@ -102,7 +103,39 @@ async function create_embeddings(df) {
   return Final
 }
 
+
+
+function vector_similarity(x, y) {
+    
+    return x.map((a, i) => x[i] * y[i]).reduce((m, n) => m + n);
+}
+
+
+
+async function order_document_sections_by_query_similarity(query, contexts){
+    
+    const query_embedding = await get_query_embedding(query)
+    
+    let document_similarities = []
+    
+    for (const [key, value] of Object.entries(contexts)) {
+      document_similarities.push( [vector_similarity(query_embedding, value),key] )
+    }
+    document_similarities.sort(function(a,b) {
+      return b[0]-a[0]
+    })
+    
+    /*sorted([
+        (vector_similarity(query_embedding, doc_embedding), doc_index) for doc_index, doc_embedding in contexts.items()
+    ], reverse=True)
+    */
+    return document_similarities
+}
+
 const data = JSON.parse(readFileSync("Context.json"))
+const Embeds = load_embeddings("ContextEmbedding.json")
+
+order_document_sections_by_query_similarity("Should I use optifine?", Embeds).then(tab=>console.log(tab))
 
 /* Creates a "ContextEmbedding.json" file"
 
