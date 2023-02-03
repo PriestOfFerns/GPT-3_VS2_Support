@@ -2,21 +2,21 @@
     {
         "Title":"Optifine",
         "Header":"Replacement",
-        "Content":"Optifine should be replaced with rubidium, it's closed source nature prevents us from making compat for it"
+        "Content":"Optifine should be replaced with rubidium, since unlike Optifine, rubidium is open source."
     },
     {
         "Title":"Optifine",
         "Header":"Use",
-        "Content":"You shouldn't use Optifine, it's closed soured nature prevents us from making compat for it"
+        "Content":"You shouldn't use Optifine, it's closed soured nature prevents us from making compat for it."
     },
     {
         "Title":"Clockwork",
-        "Header":"Download",
-        "Content":"Clockwork is currently in a closed alpha, testers are selected by the devs and no, constantly asking doesn't help you get it in"
+        "Header":"Where Download",
+        "Content":"You can't download Clockwork as it's currently in a closed alpha, testers are selected by the devs. And no, constantly asking doesn't help you become a tester."
     },
     {
         "Title":"Clockwork",
-        "Header":"Release",
-        "Content":"Clockwork is currently in a closed alpha, it'll be released to the public anywhere from 2-4 weeks"
+        "Header":"When Release",
+        "Content":"Clockwork is currently in a closed alpha, it'll be released to the public anywhere from 2-4 weeks."
     }
 ]
