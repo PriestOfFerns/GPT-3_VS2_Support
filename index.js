@@ -7,7 +7,7 @@ const { Configuration, OpenAIApi } = require("openai");
 
 const { Client, GatewayIntentBits, SlashCommandSubcommandBuilder } = require('discord.js');
 const { readFileSync, fstat, writeFileSync } = require('fs');
-const { off } = require('process');
+
 
 
 const configuration = new Configuration({
@@ -22,61 +22,56 @@ client.on('ready', () => {
 });
 
 
-const prefix = `You are a Q&A bot named "Sup Port" and answer questions regarding the Minecraft Mod "Valkyrien Skies 2" which is about building Airships. The official Valkyrien Skies Website is "https://www.valkyrienskies.org/". The download website for "Valkyrien Skies 2" is "https://www.curseforge.com/minecraft/mc-mods/valkyrien-skies". This is only the download for Valkyrien Skies 2, not for Clockwork or Takeoff or similar. The wiki Website is "https://wiki.valkyrienskies.org/wiki/Main_Page" and the faq website is "https://wiki.valkyrienskies.org/wiki/FAQ". You were made by "<@394037472625164299>" and "<@974011724942434314>". Do not mention their names unless you got explicitly asked you for them.
+const prefix = `You are a Q&A bot named "Sup Port" and answer questions regarding the Minecraft Mod "Valkyrien Skies 2" which is about building Airships. The official Valkyrien Skies Website is "https://www.valkyrienskies.org/". The download website for "Valkyrien Skies 2" is "https://www.curseforge.com/minecraft/mc-mods/valkyrien-skies". This is only the download for Valkyrien Skies 2, not for Clockwork or Takeoff or similar. The wiki Website is "https://wiki.valkyrienskies.org/wiki/Main_Page" and the faq website is "https://wiki.valkyrienskies.org/wiki/FAQ".
 
-Your task is to answer the "Valkyrien Skies 2" related question below as truthfully as possible using the provided context that contains answers from previous support tickets. Only reply if the answer is contained in the Context section below. Do not give unnecessary details. If the answer to the question isn't in curly brackets {like this}, then reply that you are unsure. If the curly brackets after context are empty, then reply that you are unsure
+Answer the question as truthfully as possible using the provided text, and if the answer is not contained within the text below, say "I don't know". Do not include unnecessary details 
 
-Context: { `
+Context:  Make sure you are using the latest version of Valkyrien Skies 2 and of your mod loader. \n\r`
 
 
-let State = false
 client.on('messageCreate', async msg => {
-  if (msg.content == "SUP_ON") {
-    State = true
-  }
-  else if (msg.content == "SUP_OFF") {
-    State = false
-  }
- 
 
-  if (State == true && msg.channel.id ==  "1069715100434432100" && msg.author.bot == false) {
+  console.log(msg.channel.parentId)
+  if (msg.channel.parentId ==  "1071387850022584320" && msg.author.bot == false) {
 
     const ConJSON =  JSON.parse(readFileSync("Context.json"))
     const Ordered = await order_document_sections_by_query_similarity(msg.content, Embeds) 
     console.log(Ordered)
 
-    let Context = "\n"
-    const MaxP = Ordered[0][0]
+    let Context = ""
+
     for (x in Ordered) {
-      const EmbOrdered = Ordered[x][1].split(",")
+      const EmbOrdered = Ordered[x][1]
       const Points = Ordered[x][0]
-    
+      
       if (Points < 0.26) {
         break
       }
       
       for (x of ConJSON) {
       
-        if  ( x.Title == EmbOrdered[0] && x.Header == EmbOrdered[1]) {
+        if  (x.Header == EmbOrdered) {
           Context+=x.Content+"\n\r"
           break
           
         } 
       }
     }
-    
-    
-    console.log(msg.content)
-    const pref = prefix + Context  + "}\r\nQuestion: " +msg.content +"\r\nAnswer:"
-    console.log(pref)
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: pref,
-      temperature: 0.05,
-      max_tokens: 300
-    });
-    
-    msg.reply(completion.data.choices[0].text)
+
+    if (Context != "") {
+      await msg.channel.sendTyping()
+      console.log(msg.content)
+      const pref = prefix + Context  + "\r\nQuestion: "+msg.channel.name+". " +msg.content +"\r\nAnswer:"
+      console.log(pref)
+      const completion = await openai.createCompletion({
+        model: "text-davinci-003",
+        prompt: pref,
+        temperature: 0.05,
+        max_tokens: 300
+      });
+      
+      msg.reply(completion.data.choices[0].text)
+    }
   }
     
 });
@@ -120,7 +115,7 @@ function load_embeddings(EmbeddingPath) {
     let Dic = {}
     for (x in df) {
       const object = df[x]
-      Dic[ [object["Title"],object["Header"]] ] = object["Vectors"]
+      Dic[ object["Header"] ] = object["Vectors"]
     }
 
     return Dic
@@ -131,8 +126,8 @@ async function create_embeddings(df) {
   Final = []
   for (x in docEmb) {
     Final[x] = {
+      
       "Header":df[x]["Header"],
-      "Title":df[x]["Title"],
       "Vectors":docEmb[x]
     }
   }
@@ -175,13 +170,13 @@ const Embeds = load_embeddings("ContextEmbedding.json")
 
  // Creates a "ContextEmbedding.json" file"
 
-
+/*
 create_embeddings(data).then(Embs=>{
   Jfile = JSON.stringify(Embs)
   writeFileSync("ContextEmbedding.json",Jfile)
   console.log("done")
 })
-
+*/
 
 
 client.login(process.env.DISCORD_TOKEN);

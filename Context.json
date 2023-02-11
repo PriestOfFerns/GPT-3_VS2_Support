@@ -1,36 +1,36 @@
 [
     {
-        "Title":"Optifine",
-        "Header":"What do I Replacement it with",
+        
+        "Header":"What should I replace Optifine with",
         "Content":"Optifine should be replaced with rubidium, since unlike Optifine, rubidium is open source."
     },
     {
-        "Title":"Optifine",
-        "Header":"Should I Use it",
+        
+        "Header":"Should I use Optifine",
         "Content":"You shouldn't use Optifine, it's closed soured nature prevents us from making compat for it."
     },
     {
-        "Title":"Clockwork",
-        "Header":"Where can I Download it",
+       
+        "Header":"Where can I download Clockwork",
         "Content":"You can't download Clockwork as it's currently in a closed alpha, testers are selected by the devs. And no, constantly asking doesn't help you become a tester."
     },
     {
-        "Title":"Clockwork",
-        "Header":"When does it Release",
+      
+        "Header":"When does Clockwork release",
         "Content":"Clockwork is currently in a closed alpha, it'll be released to the public anywhere from 2-4 weeks."
     },
     {
-        "Title":"Ship",
-        "Header":"It is Invisible",
-        "Content":"Are you using Optifine? If you are, then you should remove it, as it isn't compatible and can lead to your ship becoming invisible."
+        
+        "Header":"My ship is invisible",
+        "Content":"If you are using Optifine, then delete it. Else make sure that you're using the latest version of the mod"
     },
     {
-        "Title":"Take Off",
-        "Header":"Where can I Download it",
+        
+        "Header":"Where can I Download TakeOff",
         "Content":"You can download takeoff using this video: 'https://www.youtube.com/watch?v=BEocRbmM9Co&ab_channel=Rango' "
     },
     {
-        "Title":"exit code",
+        
         "Header":"exit code -1",
         "Content":"Are you sure you have all the depedencies you need? For example the forge version requires the Kotlin mod to be installed"
     }
